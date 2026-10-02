@@ -2526,7 +2526,7 @@ Potentially breaking:
 
 Publish a new tool version for breaking changes.
 
-# 113. Principal-engineer interview discussion
+# 113. Discussion
 
 Key topics this project demonstrates:
 
