@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: connector-gateway}
+spec:
+  replicas: 3
+  selector: {matchLabels: {app: connector-gateway}}
+  template:
+    metadata: {labels: {app: connector-gateway}}
+    spec:
+      securityContext: {runAsNonRoot: true}
+      containers:
+      - name: gateway
+        image: connector-gateway:1.0.0
+        ports: [{containerPort: 8080}]
+        readinessProbe: {httpGet: {path: /health/ready, port: 8080}, initialDelaySeconds: 5}
+        livenessProbe: {httpGet: {path: /health/live, port: 8080}, initialDelaySeconds: 10}
+        resources:
+          requests: {cpu: "250m", memory: "256Mi"}
+          limits: {cpu: "2", memory: "1Gi"}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: connector-gateway}
+spec:
+  selector: {app: connector-gateway}
+  ports: [{port: 80, targetPort: 8080}]
